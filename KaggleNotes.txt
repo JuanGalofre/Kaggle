@@ -1,4 +1,4 @@
 Kaggle notes:
   I can do 
-    print(dir(rolls))
+    print(dir(<object or function>)) also help(<object or function>)
   on an unkwnown object and it will appear what can i do with said object
