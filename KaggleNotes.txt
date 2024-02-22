@@ -25,6 +25,11 @@ Decision tree model
       for max_leaf_nodes in [5, 50, 500, 5000]:
         my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
         print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+  So what we can do is to find the best amount of leaf nodes by the common way, that means, splitting our training data into train and test. And then we 
+  use the whole data to create our model for evaluation
+Random Forest
+  It uses many trees, and make the prediction based on the average of those trees.
+  Random forest regressor
 
 4 steps for building a model
   Define: What type of model will it be ? 
