@@ -10,6 +10,21 @@ Decision tree model
   The data used to fit the model is called training data. And the data that we use is the training data
   If the tree has more splits, so if it takes into account more data, it can be said that it is a deeper tree
   The point at the bottom where we make the decision is called a leaf
+  The depth of the tree is really important, as it determines how many variables it takes into account to make a prediction. For each split that we have
+  in our tree, the amount of leafs doubles. So to calculate how mean leafs we will have, it's just to do 2**n, where n is the number of splits or variables
+  we are going to take into account.
+  Here lies as problem, as we get more divisions, that means, that our data is getting divided as well. That means if we use a lot of variables, or if we     have a lot of depth in our tree, we will have little to none data in each resulting leaf. That means that each leaf is going to mimic the training data, but
+  it's going to perform poorly when it comes to external data. That is overfitting
+  Also underfitting happens when we have to little leafs, meaning that the data is yet to be classified. That means that we will have a poor performance in
+  both sets.
+  So, what they do is to control the amount of leafs. What is kinda weird is how we can control the amount of leaves and at the same time, have the same 
+  variables in it.
+    Model was built like: 
+      model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    Then we can explore between leaf amounts like:
+      for max_leaf_nodes in [5, 50, 500, 5000]:
+        my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
+        print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
 
 4 steps for building a model
   Define: What type of model will it be ? 
@@ -30,6 +45,7 @@ Definitions
   Features: Columns that are inputted into our model and later used to make predictions
   Target: Column which has the data that we are going to predict
   Validation data -> Data that is excluded from the model-building process, in order to test the model with it
+  Overfitting -> When the model has so little data in each leaf, that we match the training set perfectly. But that also means that we have problems with external data
 
 
 Usefull functions
