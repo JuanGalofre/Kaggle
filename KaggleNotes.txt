@@ -4,3 +4,45 @@ Kaggle notes:
   on an unkwnown object and it will appear what can i do with said object
 Random forest model
   Model where we create several trees that indivually consider each passanger data and vote on whether the individual survived.
+
+Decision tree model
+  Step of capturing patterns from data is called fitting or training the model. 
+  The data used to fit the model is called training data. And the data that we use is the training data
+  If the tree has more splits, so if it takes into account more data, it can be said that it is a deeper tree
+  The point at the bottom where we make the decision is called a leaf
+
+4 steps for building a model
+  Define: What type of model will it be ? 
+  Fit: Capture patterns from the data
+  Predict
+  Evaluate: Determine how accurate the model predictions are
+Model Validation
+  Mean absolute error aka MAE
+  error is error=actual-predicted
+  So if a house cost 150 and my model predicted 100, then the error will be 50 
+  MAE- Take the absolute value of each error. And then we take the average of those absolute errors.
+  "On average, our predictions are off by about X"
+  There is an built in function to do it. 
+  from sklearn.metrics import mean_absolute_error
+  It is no so good to use the training set as the test set. As we need to have different training data vs testing data. Because some patterns can only be true in the training data.
+
+Definitions
+  Features: Columns that are inputted into our model and later used to make predictions
+  Target: Column which has the data that we are going to predict
+  Validation data -> Data that is excluded from the model-building process, in order to test the model with it
+
+
+Usefull functions
+  DataFrame.describe()-> describes the dataset
+  DataFrame.columns().to_list() -> get a list with all the headers of the data frame
+  DataFrame.column -> Obtiene la columna como una variable, exactamente como un Series
+  I can select which columns do i want from a dataframe by doing DataFrame[columns]. That way i get a data frame only whit the values i'm interested in
+  Some models have a random_state value, that is like a seed, so we can make the model deterministic. It is considered as a good practice 
+  mean_absolute_error(y,predicted_y) will compare and throw the difference between our y and the predicted_y in terms of numbers.
+  train_test_split will split the data of our training set into training and test set.
+  One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
+
+
+  
+
+
