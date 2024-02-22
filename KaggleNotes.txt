@@ -40,7 +40,7 @@ Usefull functions
   Some models have a random_state value, that is like a seed, so we can make the model deterministic. It is considered as a good practice 
   mean_absolute_error(y,predicted_y) will compare and throw the difference between our y and the predicted_y in terms of numbers.
   train_test_split will split the data of our training set into training and test set.
-  One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
+    One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
 
 
   
