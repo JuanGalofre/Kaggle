@@ -65,6 +65,29 @@ Usefull functions
     One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
 
 
+Pandas
+  DataFrame and series are the two core objects of pandas
+  A pandas dataframe can be done like:
+    pd.DataFrame({'Yes':[1,2,3,4,5],'No':{2,3,4,5,6}})
+  Where the Key is the label of the column, and the values are the list that is beside it.
+  Index by default is numeric, from 0 to .., but we can specify it using
+    pd.DataFrame({'Yes':[1,2,3,4,5],
+                  'No':{2,3,4,5,6}},
+                  index=['Stuff A','Stuff B'])
+  But Index and those columns should have the same size.
+  Series -> pd.Series([1,2,3,4,5]). It is a single column of a datafrmae. So the stuff that we did in the pd.DataFrame are actually series
+  So series can have an index, and a name
+  pd.Series([30, 35, 40], 
+            index=['2015 Sales', '2016 Sales', '2017 Sales'], 
+            name='Product A')
+  df.shape() -> How many columns and rows the df has
+  df.head() -> First 5 rows of the Df
+  A series also can be done of a join of 2 lists, like 
+    quantities = ['4 cups', '1 cup', '2 large', '1 can']
+    items = ['Flour', 'Milk', 'Eggs', 'Spam']
+    recipe = pd.Series(quantities, index=items, name='Dinner')
+  While we read a csv, we can asume that the first column is the index. By loading it
+  by pd.read_csv("", index_col=0)
   
 
 
