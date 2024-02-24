@@ -117,7 +117,39 @@ we can select the value that we want by treating it like a list.
           df.loc['Apples':'Potatoes']
       So, here, index becomes important and there are methods to deal with it, like setting an index from a column that we have 
         reviews.set_index('title')
-        
+    CONDITIONAL SELECTION (filtering)
+      As we select the column of a dataframe using attributes. We can use this to compare to a constant
+        review.country=='Italy'
+      That comparison will yield a series of True/False booleans based on the country of each record.
+        It is a series like [True,False,True,True,False] and so on
+      When we want to obitain objects in the data frame, we need to use .loc to get those columns
+        df.loc[df.country=='Italy']
+      I guess this is because we are selecting the rows where country == 'Italy'. And I guess is selecting the rows because we put a first argument in there, which are commonly rows.
+      We can also use logical operators in it
+        df.loc[(df.country =='Italy') & (df.points >= 90)] it is quite interesting that we have to put the arguments of the dataframe inside of the dataframe. I mean that we have to use the dataframe to filter stuff in it. THe first condition. That will give us a Series. The second one also wil give us a Series object. And then we have to use those Series objects and putting them in the dataframe again. Is not like a filter, is like we are giving the indiciation of which columns do we wanna show 
+        df.loc[(df.country=='Italy')|(df.points>=90)]
+      Pandas has its own conditional selectors.
+        isin let us know if some data is inside a list of values.
+          df.loc[df.country.isin(['Italy','France'])]
+        isnull and notnull: Self explanatory but really important
+          df.loc[df.df.column.notull()]
+  ASSIGNING DATA 
+    To put an assignment to the whole column, we go to the pandas series object and 
+      df['column']='value'. And then all the Series will have the value 'value'
+    We can also assign a list of values 
+      df['column']=range(len(reviews),0)
+    Here it appears something really really important, and that is the length of a series. If we are going to assign values to a series, it must be of the same length of said series. It is really important, as otherwise we will get an error
+  MISTAKES
+    This right here can be kind of tricky. We just need to remember that it is better to put the brackets on each expression
+      top_oceania_wines = reviews[((reviews.country=="Australia")|(reviews.country=="New Zealand"))& (reviews.points>=95)]
+    Another tricky one. About accesing with loc
+      This is valid 
+        df = reviews.loc[:99,['country','variety']]
+      This is also valid 
+        indexes=range(100) df = reviews.loc[index,['country','variety']]
+      But this is not valid        
+        df = reviews.loc[[:99],['country','variety']]
+
 
   
 
