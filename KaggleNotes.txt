@@ -1,156 +1,603 @@
 Kaggle notes:
-  I can do 
-    print(dir(<object or function>)) also help(<object or function>)
-  on an unkwnown object and it will appear what can i do with said object
-Random forest model
-  Model where we create several trees that indivually consider each passanger data and vote on whether the individual survived.
+  PYTHON
+    I can do 
+      print(dir(<object or function>)) also help(<object or function>)
+    on an unkwnown object and it will appear what can i do with said 
+  MODELS
+    Decision tree model
+      Step of capturing patterns from data is called fitting or training the model. 
+      The data used to fit the model is called training data. And the data that we use is the training data
+      If the tree has more splits, so if it takes into account more data, it can be said that it is a deeper tree
+      The point at the bottom where we make the decision is called a leaf
+      The depth of the tree is really important, as it determines how many variables it takes into account to make a prediction. For each split that we have
+      in our tree, the amount of leafs doubles. So to calculate how mean leafs we will have, it's just to do 2**n, where n is the number of splits or variables
+      we are going to take into account.
+      Here lies as problem, as we get more divisions, that means, that our data is getting divided as well. That means if we use a lot of variables, or if we     have a lot of depth in our tree, we will have little to none data in each resulting leaf. That means that each leaf is going to mimic the training data, but
+      it's going to perform poorly when it comes to external data. That is overfitting
+      Also underfitting happens when we have to little leafs, meaning that the data is yet to be classified. That means that we will have a poor performance in
+      both sets.
+      So, what they do is to control the amount of leafs. What is kinda weird is how we can control the amount of leaves and at the same time, have the same 
+      variables in it.
+        Model was built like: 
+          model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+        Then we can explore between leaf amounts like:
+          for max_leaf_nodes in [5, 50, 500, 5000]:
+            my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
+            print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+      So what we can do is to find the best amount of leaf nodes by the common way, that means, splitting our training data into train and test. And then we 
+      use the whole data to create our model for evaluation
 
-Decision tree model
-  Step of capturing patterns from data is called fitting or training the model. 
-  The data used to fit the model is called training data. And the data that we use is the training data
-  If the tree has more splits, so if it takes into account more data, it can be said that it is a deeper tree
-  The point at the bottom where we make the decision is called a leaf
-  The depth of the tree is really important, as it determines how many variables it takes into account to make a prediction. For each split that we have
-  in our tree, the amount of leafs doubles. So to calculate how mean leafs we will have, it's just to do 2**n, where n is the number of splits or variables
-  we are going to take into account.
-  Here lies as problem, as we get more divisions, that means, that our data is getting divided as well. That means if we use a lot of variables, or if we     have a lot of depth in our tree, we will have little to none data in each resulting leaf. That means that each leaf is going to mimic the training data, but
-  it's going to perform poorly when it comes to external data. That is overfitting
-  Also underfitting happens when we have to little leafs, meaning that the data is yet to be classified. That means that we will have a poor performance in
-  both sets.
-  So, what they do is to control the amount of leafs. What is kinda weird is how we can control the amount of leaves and at the same time, have the same 
-  variables in it.
-    Model was built like: 
-      model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
-    Then we can explore between leaf amounts like:
-      for max_leaf_nodes in [5, 50, 500, 5000]:
-        my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
-        print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
-  So what we can do is to find the best amount of leaf nodes by the common way, that means, splitting our training data into train and test. And then we 
-  use the whole data to create our model for evaluation
-Random Forest
-  It uses many trees, and make the prediction based on the average of those trees.
-  Random forest regressor
+    Random Forest
+      It uses many trees, and make the prediction based on the average of those trees.
+      Random forest regressor
 
-4 steps for building a model
-  Define: What type of model will it be ? 
-  Fit: Capture patterns from the data
-  Predict
-  Evaluate: Determine how accurate the model predictions are
-  When we want to use our model in practice, we can use all our data to train it, instead of splitting the data into training and test datasets
-Model Validation
-  Mean absolute error aka MAE
-  error is error=actual-predicted
-  So if a house cost 150 and my model predicted 100, then the error will be 50 
-  MAE- Take the absolute value of each error. And then we take the average of those absolute errors.
-  "On average, our predictions are off by about X"
-  There is an built in function to do it. 
-  from sklearn.metrics import mean_absolute_error
-  It is no so good to use the training set as the test set. As we need to have different training data vs testing data. Because some patterns can only be true in the training data.
+    4 steps for building a model
+      Define: What type of model will it be ? 
+      Fit: Capture patterns from the data
+      Predict
+      Evaluate: Determine how accurate the model predictions are
+      When we want to use our model in practice, we can use all our data to train it, instead of splitting the data into training and test datasets
+    
+    Model Validation
+      Mean absolute error aka MAE
+      error is error=actual-predicted
+      So if a house cost 150 and my model predicted 100, then the error will be 50 
+      MAE- Take the absolute value of each error. And then we take the average of those absolute errors.
+      "On average, our predictions are off by about X"
+      There is an built in function to do it. 
+      from sklearn.metrics import mean_absolute_error
+      It is no so good to use the training set as the test set. As we need to have different training data vs testing data. Because some patterns can only be true in the training data.
+      I can select which columns do i want from a dataframe by doing DataFrame[columns]. That way i get a data frame only whit the values i'm interested in
+      Some models have a random_state value, that is like a seed, so we can make the model deterministic. It is considered as a good practice 
+      mean_absolute_error(y,predicted_y) will compare and throw the difference between our y and the predicted_y in terms of numbers.
+      train_test_split will split the data of our training set into training and test set.
+        One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
 
-Definitions
-  Features: Columns that are inputted into our model and later used to make predictions
-  Target: Column which has the data that we are going to predict
-  Validation data -> Data that is excluded from the model-building process, in order to test the model with it
-  Overfitting -> When the model has so little data in each leaf, that we match the training set perfectly. But that also means that we have problems with external data
+    Definitions
+      Features: Columns that are inputted into our model and later used to make predictions
+      Target: Column which has the data that we are going to predict
+      Validation data -> Data that is excluded from the model-building process, in order to test the model with it
+      Overfitting -> When the model has so little data in each leaf, that we match the training set perfectly. But that also means that we have problems with external data
+  Pandas
+    DATAFRAME AND SERIES
+      DataFrame and series are the two core objects of pandas
+      A pandas dataframe can be done like:
+        pd.DataFrame({'Yes':[1,2,3,4,5],'No':{2,3,4,5,6}})
+      Where the Key is the label of the column, and the values are the list that is beside it.
+      Index by default is numeric, from 0 to .., but we can specify it using
+        pd.DataFrame({'Yes':[1,2,3,4,5],
+                      'No':{2,3,4,5,6}},
+                      index=['Stuff A','Stuff B'])
+      But Index and those columns should have the same size.
+      Series -> pd.Series([1,2,3,4,5]). It is a single column of a datafrmae. So the stuff that we did in the pd.DataFrame are actually series
+      So series can have an index, and a name
+      pd.Series([30, 35, 40], 
+                index=['2015 Sales', '2016 Sales', '2017 Sales'], 
+                name='Product A')
+      df.shape() -> How many columns and rows the df has
+      df.head() -> First 5 rows of the Df
+      A series also can be done of a join of 2 lists, like 
+        quantities = ['4 cups', '1 cup', '2 large', '1 can']
+        items = ['Flour', 'Milk', 'Eggs', 'Spam']
+        recipe = pd.Series(quantities, index=items, name='Dinner')
+      While we read a csv, we can asume that the first column is the index. By loading it
+      by pd.read_csv("", index_col=0)
+      Columns in pandas are attributes of the data frame, so we can access a column of said dataframe by a dot. df.column. Also it can be done using the dictionary notation, like df['column'].
+      Also, as we access the df['column'] what we are accesing is a series. So inside a series
+      we can select the value that we want by treating it like a list.
+      So df['column'][0] will access de dataframe 'column' series, and access the first value that is in it
+    INDEXING, SELECTING AND ASSIGNING
+      INDEX BASED SELECTION
+        Pandas objects can be accesed through indexes. Like a list. It can be done when working with df.iloc[0]. Both loc and iloc are row first, column second. But that's the opposite of what we commonly do in python, whre it is column first, row second.
+        We can use the : operator, that means everything.
+          So we can retireve all the rows in a said column by using iloc in this way
+            df.iloc[:,0]. So i will get all the rows of the 0 column
+        We can add positions to said operator, to explicit the limits of that everything. That means that if we need just the first 3 elements, we can obtain them through
+          df.iloc[:3,0]-> we will ge the the first 3 elements in the row, for the column 0
+        We need to remember that python indexes start at 0, so if we want to get just the second and the third entry, we will use the : operator like:
+          df.iloc[1:3,0]. Here the 1 represents the second element. And the 3 represents the fourth element. But in this operator, the left number is inclusive, and the right number is not inlusive, so we will stop at n-1. Tha means we start at 1 and we stop at 2
+        A list can also be passed along
+          df.iloc[[0,1,2],0]
+        Negative numbers can be used to, and it will begin at the end of the file
+          df.iloc[-5:]
+      LABEL BASED SELECTION
+        Here we are working with the data index value. So the title
+        To get the first value of the 'country' column
+          df.loc[0,'country'] -> Rows first, columns second
+        And we can make use of that style of selection when we want to get info of some columns that we now.
+          reviews.loc[:, ['taster_name', 'taster_twitter_handle', 'points']]-> Here, as we now the names of those columns, we can get all rows(:) for those columns
+        But here, when we use the : operator, it works differently. It now becomes inclusive. So if i do 1:3, i will also get the 4th element.
+          That operator works in letters so. So let's say we wanna select food in alfabetical order. If we want to select from A to P, and specifically from Apples to Potatoes, we can use
+            df.loc['Apples':'Potatoes']
+        So, here, index becomes important and there are methods to deal with it, like setting an index from a column that we have 
+          reviews.set_index('title')
+      CONDITIONAL SELECTION (filtering)
+        As we select the column of a dataframe using attributes. We can use this to compare to a constant
+          review.country=='Italy'
+        That comparison will yield a series of True/False booleans based on the country of each record.
+          It is a series like [True,False,True,True,False] and so on
+        When we want to obitain objects in the data frame, we need to use .loc to get those columns
+          df.loc[df.country=='Italy']
+        I guess this is because we are selecting the rows where country == 'Italy'. And I guess is selecting the rows because we put a first argument in there, which are commonly rows.
+        We can also use logical operators in it
+          df.loc[(df.country =='Italy') & (df.points >= 90)] it is quite interesting that we have to put the arguments of the dataframe inside of the dataframe. I mean that we have to use the dataframe to filter stuff in it. THe first condition. That will give us a Series. The second one also wil give us a Series object. And then we have to use those Series objects and putting them in the dataframe again. Is not like a filter, is like we are giving the indiciation of which columns do we wanna show 
+          df.loc[(df.country=='Italy')|(df.points>=90)]
+        Pandas has its own conditional selectors.
+          isin let us know if some data is inside a list of values.
+            df.loc[df.country.isin(['Italy','France'])]
+          isnull and notnull: Self explanatory but really important
+            df.loc[df.df.column.notull()]
+    ASSIGNING DATA 
+      To put an assignment to the whole column, we go to the pandas series object and 
+        df['column']='value'. And then all the Series will have the value 'value'
+      We can also assign a list of values 
+        df['column']=range(len(reviews),0)
+      Here it appears something really really important, and that is the length of a series. If we are going to assign values to a series, it must be of the same length of said series. It is really important, as otherwise we will get an error
+    MISTAKES
+      This right here can be kind of tricky. We just need to remember that it is better to put the brackets on each expression
+        top_oceania_wines = reviews[((reviews.country=="Australia")|(reviews.country=="New Zealand"))& (reviews.points>=95)]
+      Another tricky one. About accesing with loc
+        This is valid 
+          df = reviews.loc[:99,['country','variety']]
+        This is also valid 
+          indexes=range(100) df = reviews.loc[index,['country','variety']]
+        But this is not valid        
+          df = reviews.loc[[:99],['country','variety']]
+    JOINING DATASETS
+      A simple way to join datasets its to use 
+        pd.concat([df1,df2])
+      Here we will join two dataframes when the index has the same title
+        left = canadian_youtube.set_index(['title', 'trending_date'])
+        right = british_youtube.set_index(['title', 'trending_date'])
+      Here, the lsuffix and rsuffix are used because the columns have the same name, and in order to differentiate them, pandas provide us with a suffix method that updates them to be able to differentiate them 
+        left.join(right, lsuffix='_CAN', rsuffix='_UK')
+    FUNCTIONS AND MAPS
+      FUNCTIONS
+        Pandas has summary functions like .describe()
+        It will change according to the data type. If it is numeric, then we will have the stats than can be extracted with numbers. If it is a String, then we have a count, unique data, top, and frequence
+        When we want to take a look at a statistic of a column, we can apply that stat to the column. df.column.mean() in order to get the mean of a column
+        Unique values can be extracted with df.column.unique()
+        To count said values, we can count with df.column.value_counts()
+      MAPS	
+        A map is  function that takes one set of values and maps them into another set of values. So it transforms said set of values to another set.
+        Functions to make this possible is map()
+          For example, we can get the mean of the points in a review like
+            review_points_mean = review.points.mean()
+          Then, we can see what's the difference between each score and the mean()
+            review_points.map(lambda p:(p-review_points_mean)) -> Where map expect a single value
+        If we want to transform a dataFrame, we can use apply()
+          def remean_points(row):row.points= row.points-review_points_mean return row
+          reviews.apply(remean_points, axis='columns')
+          This axis='columns' is important because the function is going to be applied to each row. With axis='index' we need a function to transform each function. So what we do with that apply function with 'columns' is basically for me, a foreach row by row where we apply a function. Instead when we use axis='index' we apply it column by column
+        These functions do not mutate the original df, the just return the new data. They are accesors
+        Pandas does have some of this operations as built ins, but i think i prefer to use a map(lambda) function to get a better control
+          Some example of said built ins can be:
+            reviews.country + " - " + reviews.region_1
+          These operations are faster than map tho. 
+        But these type of operations help us in a logic/natural way to take a look at the data. Because we can do stuff like
+          bargain_id=(reviews.points/reviews.price).idxmax()
+          bargain_wine = reviews.loc[bargain_id,'title']
+        Where i just divide the values of the rows of points and price, and get the idxmax() of them. It is a logical way to get a max value which is balanced between 2 values.
+        Then i can know the max item because idxmax give me the index of the max, i can just re insert it into the df in order to get the title of the value. 
+      MISTAKES
+        There is this issue where in order to get the value of some variables, we can not always sum directly them values. So we can get the values by using the attribute and a map.
+      ANNOTATIONS
+        Apply is a really powerfull technique to modify dataframes in the order that i find logic. That is row by row or column by column
+    GROUPING AND SORTING
+      The value_counts() can be replicated by using
+        reviews.groupby('points').points.count().
+      What groupby does is to create a group of reviews which have the same value for points. Then for each of those groups, the points is grabbed and counted. But, how groupby works ? 
+      I think in this case, as we are doing groupby points. We are selecting said column. Once we select that column, I imagine that all the rows with the same value in points are grouped. By itself i think the function doesnt do much. But when we mix that with count, then we are going to count the number of rows that have the same points.
+      We can access those values also in apply
+        reviews.groupby('winery').apply(lambda df: df.title.iloc[0])
+      A new dataframe should be created then
+      Based on what we have learned, the lambda function should reference each dataframe. Which dataframes ?
+        Here we have our asnwer: This means that all rows in the DataFrame that have the same value in the 'winery' column will be grouped together into separate groups. Each group will be a DataFrame containing all rows with the same 'winery' value.
+      This is pretty interesting, as it means that whenever we group, plenty of dataframes are created with the same column value.
+      And this will apply as we keep adding and adding columns to the group by function. 
+        reviews.groupby(['country', 'province']).apply(lambda df: df.loc[df.points.idxmax()])
+      These will give us a dataframe that is first organized by country, and then by province. 
+        reviews.groupby(['country']).price.agg([len, min, max])
+      Aggregate will give us a new dataframe with multiple functions at the same time. So we will get a dataframe with countries, which have columns for min, max and len
+      When we group stuff by many columns, we can end up with multiple indexes. So to get it back to normal we can do
+        countries_reviewed.reset_index()
+    SORTING
+      We can sort a column by doing 
+        countries_reviewed.sort_values(by='len')
+      There are options to order by 
+        ascending = True or False depending 
+      We can sort by index using countries_reviewed.sort_index()
+      Sorting multiple columns at a time 
+        countries_reviewed.sort_values(by=['country', 'len'])
+      Q&A
+        Who are the most common reviewers in the data set
+          reviews_written = reviews.groupby(['taster_twitter_handle']).taster_twitter_handle.count()
+        In the first part of the code, we group by the column. So we will create a group of dataframes which are grouped by the name of the
+        twitter handle. 
+        Then we grab them column, and count each ocurrence of that twitter handle. Which can be different from just df.column.count()
+        The difference is that when we do df.column.count() we get all not NaN from the column. Whereas when we groupby, we will get all the non
+        NaN values from that group. So we will get the count of each group
+        With a dataframe like
+          data = {
+                  'Student': ['Alice', 'Bob', 'Charlie', 'Alice', 'Bob', 'Charlie'],
+                  'Grade': [85,  90,  95,  80,  85,  90]
+            }
+          df = pd.DataFrame(data)
+        If we do df.column.count we will get 6, as 6 are the non NaN values of the Grade column
+        But if we do df.groupby['student'].studen.count() we will get 2. As we have 2 alice, 2 bob and 2 charlie
+        
+        A lot of problems can be solved by grouping and determining which is the max or mininum of each group. It is really usefull to organize them
+        by groups
 
+        We can put a bunch of functions, and make them a dataframe using reviews.groupby(['variety']).price.agg(['min','max']) the agg function. Thatç
+        function creates a dataframe
 
-Usefull functions
-  DataFrame.describe()-> describes the dataset
-  DataFrame.columns().to_list() -> get a list with all the headers of the data frame
-  DataFrame.column -> Obtiene la columna como una variable, exactamente como un Series
-  I can select which columns do i want from a dataframe by doing DataFrame[columns]. That way i get a data frame only whit the values i'm interested in
-  Some models have a random_state value, that is like a seed, so we can make the model deterministic. It is considered as a good practice 
-  mean_absolute_error(y,predicted_y) will compare and throw the difference between our y and the predicted_y in terms of numbers.
-  train_test_split will split the data of our training set into training and test set.
-    One liner to do that train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
+        It's important ot remember that, even if we group the dataframe, the other columns are still alive. So we can order or get the columns or counts of the other columns. 
+        Same concept as the df.column.count() vs df.groupby....
+    DATA TYPES
+      dtype is the data type for a column of a dataframe or a series. if we select a column like 
+        df.column.dtype
+      We can grab them type
+      
+      We can also grab all the types of the columns by doing df.dtypes. That will yield a series with the index as the columns, and the other columns as the dtypes
+      Type of columns that only have strings do not own their own type, the remain as object type
+      It is possible to convert one column type into another type using
+        df.columns.astype('float64')
+    MISSING DATA
+      NaN value for data that does not have a value, that's what NaN stands for, not a number. They're always float64
+      We can get all the values that are null in a column by only selecting them in the data frame, using .isnull
+      df[pd.isnull(df.column)]
+      Replacing those values can be done with .fillna(). We can put any value instead of those NaN. But this will generate a new df
+      Backfilling: To fill each missing value with the first non-null value that appears sometime after the record
+      We can also replace what do we want to replace with what. So the is the method call replace()
+        df.column.replace('object to replace','new object')
+      This can be used when we use df.fillna() as we can replace said NaN values that are transformed to a string value, to a new static value.
+      Q&A
+        When we do df.isnull() we will get a copy of the dataframe with true and false values, where True equals that is null.
+        Now we can do that only in a column like
+          df.price.isnull().count()
+        But there is an issue with that approximation. Issue being that if we do count, it will count all the columns, so, we will get the length of the data frame.
+        And it will count all the values because, count counts all NON NaN values. And here we have  a series with True and False values.
+        What we can do is filter the column that we want to work on, and then count it, like
+          df.loc[df['column']==something,column].count()
+        But if we want to count in this case, how many of them are true, we can just use the fact that any True value is 1 and any false value is 0
+    INTERMEDIATE MODELS
+      INTRODUCTION  
+        This is just the setup for the model to begin the training, but is good to take a look at some stuff
+          X_full = pd.read_csv('../input/train.csv', index_col='Id')
+          X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+        Its interesting the name that they value the varaibles, as they put full for the raw data.
+        Then they get the target by 
+          y = X_full.SalePrice
+        Stablish the features that we are going to use
+          features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+        Then make a copy of each variable that we are going to work on. Like 
+          X = X_full[features].copy()
+          X_test = X_test_full[features].copy()
+        We are going to work only with the df[features] of the data. So, we are only going to grab the df[features] of the test
+        FInally, they split the data   
+        X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                              random_state=0)
+        Then we create a random forest model
+          model=RandomForestRegressor()
+        Maybe tweak that module in order to get a better prediction
+          model_1 = RandomForestRegressor(n_estimators=50, random_state=0)
+          model_2 = RandomForestRegressor(n_estimators=100, random_state=0)
+          model_3 = RandomForestRegressor(n_estimators=100, criterion='absolute_error', random_state=0)
+          model_4 = RandomForestRegressor(n_estimators=200, min_samples_split=20, random_state=0)
+          model_5 = RandomForestRegressor(n_estimators=100, max_depth=7, random_state=0)
+        Use a for to loop through those models 
+          def score_model(model, X_t=X_train, X_v=X_valid, y_t=y_train, y_v=y_valid):
+            #We fit here the model to the training data
+            model.fit(X_t, y_t)
+            #Then get the predictions of the model 
+            preds = model.predict(X_v)
+            #Finally we get the function to take a look at how good is our model
+            return mean_absolute_error(y_v, preds)
+        We evaluate that, we get the model with the least mean_absolute_error
+        Then we fit the whole data to our model and save the submission
+          my_model.fit(X, y)
+          # Generate test predictions
+          preds_test = my_model.predict(X_test)
 
+          # Save predictions in format used for competition scoring
+          output = pd.DataFrame({'Id': X_test.index,
+                                'SalePrice': preds_test})
+          output.to_csv('submission.csv', index=False)
+      MISSING VALUES
+    There are a lot of ways to end up with missing values. And we are going to get errors if we try to build a model using data with those values.
+    There is something cool that we can do in order to visualize missing data. And that is doing
+      data=pd.read_csv("train.csv")
+      msno.matrix(data)
+    What's msno ? Well, it is a library called missingno, and i can produce a lot of graphs, from matrices, bars, heatmaps and so on
+    OPTIONS
+      DROP THEM COLUMNS
+        Drop columns with missing values. Issue being, that we loss access to a lot of usefull information with this approach. IS THE WHOLE COLUMN THAT WE DROP
+        That's a little bit to extreme. If we have a looot of data, i think about the posibility of droping a row. But now i'm not sure if we can do it
+      IMPUTATION
+        Fill the missing values with some number. For example, filling with the mean value. Doing this would not give us accurate models, but it will be better that droping THE WHOLE COLUMN
+      FANCY IMPUTATION
+        As a mean can be, a little bit far away of what we want to do, or some rows with missing values can be unique. So we can consider which values were not there, by creating a new column that points that fact
+          column 1	column 2
+          1.0		1.0
+          NaN		1.0
+        We can convert that into
+          column 1	column 2	column1_missing	
+          1.0		1.0		FALSE
+          1.0(avg)	1.0		TRUE
+        Sometimes this helps, sometimes this does not work
 
-Pandas
-  DataFrame and series are the two core objects of pandas
-  A pandas dataframe can be done like:
-    pd.DataFrame({'Yes':[1,2,3,4,5],'No':{2,3,4,5,6}})
-  Where the Key is the label of the column, and the values are the list that is beside it.
-  Index by default is numeric, from 0 to .., but we can specify it using
-    pd.DataFrame({'Yes':[1,2,3,4,5],
-                  'No':{2,3,4,5,6}},
-                  index=['Stuff A','Stuff B'])
-  But Index and those columns should have the same size.
-  Series -> pd.Series([1,2,3,4,5]). It is a single column of a datafrmae. So the stuff that we did in the pd.DataFrame are actually series
-  So series can have an index, and a name
-  pd.Series([30, 35, 40], 
-            index=['2015 Sales', '2016 Sales', '2017 Sales'], 
-            name='Product A')
-  df.shape() -> How many columns and rows the df has
-  df.head() -> First 5 rows of the Df
-  A series also can be done of a join of 2 lists, like 
-    quantities = ['4 cups', '1 cup', '2 large', '1 can']
-    items = ['Flour', 'Milk', 'Eggs', 'Spam']
-    recipe = pd.Series(quantities, index=items, name='Dinner')
-  While we read a csv, we can asume that the first column is the index. By loading it
-  by pd.read_csv("", index_col=0)
-  Columns in pandas are attributes of the data frame, so we can access a column of said dataframe by a dot. df.column. Also it can be done using the dictionary notation, like df['column'].
-  Also, as we access the df['column'] what we are accesing is a series. So inside a series
-we can select the value that we want by treating it like a list.
-  So df['column'][0] will access de dataframe 'column' series, and access the first value that is in it
-  INDEXING, SELECTING AND ASSIGNING
-    INDEX BASED SELECTION
-      Pandas objects can be accesed through indexes. Like a list. It can be done when working with df.iloc[0]. Both loc and iloc are row first, column second. But that's the opposite of what we commonly do in python, whre it is column first, row second.
-      We can use the : operator, that means everything.
-        So we can retireve all the rows in a said column by using iloc in this way
-          df.iloc[:,0]. So i will get all the rows of the 0 column
-      We can add positions to said operator, to explicit the limits of that everything. That means that if we need just the first 3 elements, we can obtain them through
-        df.iloc[:3,0]-> we will ge the the first 3 elements in the row, for the column 0
-      We need to remember that python indexes start at 0, so if we want to get just the second and the third entry, we will use the : operator like:
-        df.iloc[1:3,0]. Here the 1 represents the second element. And the 3 represents the fourth element. But in this operator, the left number is inclusive, and the right number is not inlusive, so we will stop at n-1. Tha means we start at 1 and we stop at 2
-      A list can also be passed along
-        df.iloc[[0,1,2],0]
-      Negative numbers can be used to, and it will begin at the end of the file
-        df.iloc[-5:]
-    LABEL BASED SELECTION
-      Here we are working with the data index value. So the title
-      To get the first value of the 'country' column
-        df.loc[0,'country'] -> Rows first, columns second
-      And we can make use of that style of selection when we want to get info of some columns that we now.
-        reviews.loc[:, ['taster_name', 'taster_twitter_handle', 'points']]-> Here, as we now the names of those columns, we can get all rows(:) for those columns
-      But here, when we use the : operator, it works differently. It now becomes inclusive. So if i do 1:3, i will also get the 4th element.
-        That operator works in letters so. So let's say we wanna select food in alfabetical order. If we want to select from A to P, and specifically from Apples to Potatoes, we can use
-          df.loc['Apples':'Potatoes']
-      So, here, index becomes important and there are methods to deal with it, like setting an index from a column that we have 
-        reviews.set_index('title')
-    CONDITIONAL SELECTION (filtering)
-      As we select the column of a dataframe using attributes. We can use this to compare to a constant
-        review.country=='Italy'
-      That comparison will yield a series of True/False booleans based on the country of each record.
-        It is a series like [True,False,True,True,False] and so on
-      When we want to obitain objects in the data frame, we need to use .loc to get those columns
-        df.loc[df.country=='Italy']
-      I guess this is because we are selecting the rows where country == 'Italy'. And I guess is selecting the rows because we put a first argument in there, which are commonly rows.
-      We can also use logical operators in it
-        df.loc[(df.country =='Italy') & (df.points >= 90)] it is quite interesting that we have to put the arguments of the dataframe inside of the dataframe. I mean that we have to use the dataframe to filter stuff in it. THe first condition. That will give us a Series. The second one also wil give us a Series object. And then we have to use those Series objects and putting them in the dataframe again. Is not like a filter, is like we are giving the indiciation of which columns do we wanna show 
-        df.loc[(df.country=='Italy')|(df.points>=90)]
-      Pandas has its own conditional selectors.
-        isin let us know if some data is inside a list of values.
-          df.loc[df.country.isin(['Italy','France'])]
-        isnull and notnull: Self explanatory but really important
-          df.loc[df.df.column.notull()]
-  ASSIGNING DATA 
-    To put an assignment to the whole column, we go to the pandas series object and 
-      df['column']='value'. And then all the Series will have the value 'value'
-    We can also assign a list of values 
-      df['column']=range(len(reviews),0)
-    Here it appears something really really important, and that is the length of a series. If we are going to assign values to a series, it must be of the same length of said series. It is really important, as otherwise we will get an error
-  MISTAKES
-    This right here can be kind of tricky. We just need to remember that it is better to put the brackets on each expression
-      top_oceania_wines = reviews[((reviews.country=="Australia")|(reviews.country=="New Zealand"))& (reviews.points>=95)]
-    Another tricky one. About accesing with loc
-      This is valid 
-        df = reviews.loc[:99,['country','variety']]
-      This is also valid 
-        indexes=range(100) df = reviews.loc[index,['country','variety']]
-      But this is not valid        
-        df = reviews.loc[[:99],['country','variety']]
+      In case we don't need the object type (string), we can do df.select_dtypes(exclude=['object'])
+    HOW TO DO THOSE OPTIONS
+      DROP THEM LIKE THEY'RE HOT
+        We select the columns from the data set, and we need to remember to drop them from the training data and the test data. But i think it is a little better to drop that data before we split those values into train and test sets
+          cols_with_nas=[col for col in df.columns if df[col].isnull().any()]
+        df.columns is a list of the columns. df[col].isnull() will give a series data with only true false. And df[col].isnull().any(). That any will check if all the values in the series have the same value. If not it will produce a true
+        THen we drop the columns doing df.drop(cols_with_nas, axis=1)
+        Axis 1 select columns
+      IMPUTATION
+        We will use SimpleImputer to replace missing values with the mean. Why with the mean, it is simple, and quite effective. More complex strategies like regression imputation often give no aditional benefit.
+          Library: sklearn.impute import SimpleImputer
+          my_imputer = SimpleImputer() We create an object
+        Aparently, this imputer will detect the columns that have NAs, and the rows that have said NAs
+          imputed_x_train=pd.DataFrame(my_imputer).fit_transform(df))
+          https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html. Here there are a lot of info about the imputer. Speacilly the options, we can go by mean, by mode, etc.
+        What's weird is that, it is a good practice to first split the data and then use the preprocessing. So we split, we preprocess with SimpleImputer
+        FIT THE IMPUTER
+        This is new, we actually need to FIT THE IMPUTER with the data. This step is crucial because it allows the imputer to understand the data's characteristics. For example, if we called the simple imputer on strategy="mean", then the imputer is going to calculate the mean of each column and so on
+        TRANSFORM THE DATA
+        Once we fit the imputer, then we will use the transform method to apply the imputation strategy lerned from the training data.
+        That's why we do this on train data
+        imputed_x_train=pd.Dataframe(my_imputer.fit_transform(X_train))
+        We fit the data to our imputer, and then transform our data. And that's why we do
+        imputed_x_valid=pd.DataFrame(my_imputer.transform(X_valid)). 
+        We apply the same that we learn on the fit step.
+        BUT WHY DO WE HAVE TO FIRST SPLIT THE DATA?
+          PREVENT DATA LEAKAGE
+            Data leakage occurs when info from outside the training dataset is used to creat the model. This can lead to overfitting.
+            That means that the imputer, will have access to data that it should not have. Because we will have access to test data, and we want to create a model, that get's the best prediction with only the training data. Doing the transform on the whole data is like cheating, because in the training data we are not sure how all the columns are going to behave, while with the whole dataset, we have more information about the columns
+        BACK TO TRACK
+        After we fit and transform
+        imputed_X_train.columns = X_train.columns
+        imputed_X_valid.columns = X_valid.columns
+        We have to put the names back
+        And then we can fit our model.
+      FANCY OR REMEMBERED IMPUTATION
+        Here we have the columns with NAs
+          cols_with_nas=[col for col in df.columns if df[col].isnull().any()]
+        Then we can loop trough them and create new columns, with the values indicating wether the value was null or not
+        for col in cols_with_nas:
+      X_train_plus[col + '_was_missing'] = X_train_plus[col].isnull()
+      X_valid_plus[col + '_was_missing'] = X_valid_plus[col].isnull()
+        Quite a smart and fast way to do it. We just asign it to booleans here.Then we follow the IMPUTATION steps
+                my_imputer = SimpleImputer()
+                imputed_X_train_plus = pd.DataFrame(my_imputer.fit_transform(X_train_plus))
+                imputed_X_valid_plus = pd.DataFrame(my_imputer.transform(X_valid_plus))
 
+                # Imputation removed column names; put them back
+                imputed_X_train_plus.columns = X_train_plus.columns
+                imputed_X_valid_plus.columns = X_valid_plus.columns
+        Then fit and train 
+    CATEGORICAL DATA
+      Takes only a limited number of values
+        For example: Never, Rarely, Most days, Every day. Or for example brands
+      What can we do with them ? 
+        1.Drop them (?????)
+        2.Ordinal encoding.
+          That is to assign to each categorical value to a different and unique integer. This assumes and 
+          ordering of the cartegories. So Never is 0, Rarely 1, Most days 2, Every day 3
+          If the varibles can be classified in this way, were they can be ranked, there are ordinal variables
+        3.One hot encoding.
+          This encoding creates new columns indicating the presence or absecense of each possible value in the data.
+            LEt's assume we have a column full of colors
+              Color:Red,Blue,Yellow,Green.
+            We can create then a table with ones and zeros 
+              Red:1,0,0,0
+              Yellow:0,0,1,0
+              Green:0,0,0,1
+            The advantage of this type of encdoing is that it does not require an ordering or raking of the
+            categories.
+            This type of variables are called nominal variables. 
+            But it does not perform well if the categorical value takes on a large volume of values
+            so, a recomendation is don't use it if it has more than 15 values
+        WORKING WITH CATEGORICAL DATA
+          Scikit has a OrdinalEncoder that can be use to get ordinal encodings
+            from sklearn.preprocessing import OrdinalEncoder
+            ordinal_encoder = OrdinalEncoder()
+            label_X_train[object_cols] = ordinal_encoder.fit_transform(X_train[object_cols])
+          Quite the same code that we use for our SimpleImputer. As we did it before, we only care about here
+          the objective columns. This time is the columns that are categorical.
+          But it is like a random assignment. Not a clear assignment of numbers as a human would do it
+          
+          Of course, we don't have to do the one hot encoding by ourselves, there is a class in scikit that does that 
+          for us.
+            We use the OneHotEncoder class from scikit-learn to get one-hot encodings. There are a number of parameters that can be used to customize its behavior.
 
-  
+            We set handle_unknown='ignore' to avoid errors when the validation data contains classes that aren't represented in the training data, and
+            setting sparse=False ensures that the encoded columns are returned as a numpy array (instead of a sparse matrix).
+            To use the encoder, we supply only the categorical columns that we want to be one-hot encoded. For instance, to encode the training data, we supply X_train[object_cols]. (object_cols in the code cell below is a list of the column names with categorical data, and so X_train[object_cols] contains all of the categorical data in the training set.)
 
+              from sklearn.preprocessing import OneHotEncoder
 
+              # Apply one-hot encoder to each column with categorical data
+              OH_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+              OH_cols_train = pd.DataFrame(OH_encoder.fit_transform(X_train[object_cols]))
+              OH_cols_valid = pd.DataFrame(OH_encoder.transform(X_valid[object_cols]))
+          But there is still some work to do
+            Index has to be located again
+            OH_cols_train.index = X_train.index
+            OH_cols_valid.index = X_valid.index
+
+            # Remove categorical columns (will replace with one-hot encoding)
+            num_X_train = X_train.drop(object_cols, axis=1)
+            num_X_valid = X_valid.drop(object_cols, axis=1)
+
+            # Add one-hot encoded columns to numerical features
+            OH_X_train = pd.concat([num_X_train, OH_cols_train], axis=1)
+            OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
+
+            # Ensure all columns have string type
+            OH_X_train.columns = OH_X_train.columns.astype(str)
+            OH_X_valid.columns = OH_X_valid.columns.astype(str)
+          ISSUES
+            THere are some issues when working with categorical, ordinal data. And that is that, we can encounter new types of data
+            in the test set.
+            If there are differences like this in the training vs the data set. It is a little better to forget about those columns and drop 
+            them. You can also opt to categorize this new variables. But why bother when we can drop those columns and do not lose predcition capabilities
+            CARDINALITY
+              Unique entries of a categorical variable
+              This also relates to one hot encoding. As the cardinality of the variable is the same amount of columns that we need to generate when we apply
+              the one hot encoding
+    PIPES
+      Way to keep data preprocessing and modeling organized. Bundle preprocessing and modeling steps
+      Makes code clear, less bugs, easier to send to production
+      More options for Model Validation
+        So we decide some functions that will transform data.
+      IMPORTS
+        from sklearn.compose import ColumnTransformer
+        from sklearn.pipeline import Pipeline
+        from sklearn.impute import SimpleImputer
+        from sklearn.preprocessing import OneHotEncoder
+      CODE 
+        SimpleImputer
+          numerical_transformer = SimpleImputer(strategy="constant")
+        Then we will combine a SimpleImputer with a one hot encoder in a pipeline, like so:
+          categorical_transformer= Pipeline(steps=[
+            ('imputer', SimpleImputer(strategy="most_frequent")),
+            ('onehot',OneHotEncoder(handle_unknown="ignore"))
+          ])
+        Here we kinda have our sandwich constructed
+          preprocessor = ColumnTransformer(
+            transformers=[
+              ('num', numerical_transformer,numerical_cols),
+              ('cat',categorical_transformer,categorical_cols)
+            ]
+          ) (1)
+        We define a RandomForestRegressor
+          from sklearn.ensemble import RandomForestRegressor
+          model = RandomForestRegressor(n_estimators=100, random_state=0)  (2)
+        Then we use the pipeline to train the data and fit the model in a one linerç
+        In code it looks like
+          my_pipeline = Pipeline(steps=[
+            ('preprocessor',preprocessor), (1)
+            ('model', model) (2)
+          ])
+        Then we preprocess, fit and predict in 2 lines
+          my_pipeline.fit(X_train, y_train)
+          predictions = my_pipeline.predict(X_valid)
+        Evaluate then 
+          score = mean_absolute_error
+      NOTES
+        It's important to take a look at the transformers. First, we use numerical_cols 
+        and categorical_cols. That means that we need to organize the columns first,
+        and then use pipelines. It does not solve any problems related to length to the 
+        columns or something. It is just a way to make it compact.
+        What's good is we can concatenate imputer and one hot enconders at the same time
+        without worrying about the index or the name of the columns, as the pipeline already
+        handles it.
+        So it is only about what we think about the columns that we have in the dataset, and 
+        then we decide what preprocessing would we do.
+    Cross-Validation
+      There is naturally a random chance for a model to get the correct values even if the model does not fit perfectly to the data. 
+        What does this mean ? Let's think about a model, that have only 1 row of validation. It is
+        a product of chance if our model will perform good or bad on said model. So based on 1 row,
+        it is kind of hard to know if our model does indeed perform good, or if it is just luck
+      Here is where cross validation matters
+       We run our modeling process on different subsets of the data to get multiple measures of the quality
+       of said model
+       For example, we break our data into 5 diff pieces, it is said that we divide our data into 5 folds
+        Let's keep in mind that division or folding of the data in 5 pieces.
+        Then, lets's call each fold an experiment
+        So. In the first experiment, we use the first fold as validation. And we act as the other 4 folds are 
+        training datasetsç
+        Then we do that with the second dataset or fold. And get the first, the third, the fourth and the fifth as 
+        datasets, and so on.
+        Doing that, every piece of our data will be used as a validation at some point. And we have a way to validate
+        our data against the whole data.
+      When should we use it ?
+        Dataset is small. It calculates a model for each fold.
+      It is recomended to use cross validation with pipelines
+        Pipeline example  
+          from sklearn.ensemble import RandomForestRegressor
+          from sklearn.pipeline import Pipeline
+          from sklearn.impute import SimpleImputer
+
+          my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
+                                        ('model', RandomForestRegressor(n_estimators=50,
+                                                                        random_state=0))
+                                      ])
+      Then we use the cross_val_score
+        from sklearn.model_selection import cross_val_score
+        scores = -1 * cross_val_score(my_pipeline, X, y,cv=5,
+                              scoring='neg_mean_absolute_error')  
+        Cv is the amount of folds that we are going to give to our model
+        scoring is the way that we are going to evaluate our model
+        There are a lot of methods to do this 
+          https://scikit-learn.org/stable/modules/model_evaluation.html
+        As multiple values will arise from scores, to be specific, one for each fold
+        then we will use the mean of each scores to evaluate our model
+         scores.mean()
+        Good way to evaluate several details in my max_leaf_node
+    XGBOOOOOOOOOOOOOOOOOOOOOOST
+      Random forest is an ensemble method.
+      Ensemble methods combine the predictions of several models. In the case of a randome forest,
+      it combines the predictions of several trees
+      GRADIENT BOOSTING
+        It is a method that goes through cycles to iteratively add models into an ensemble
+          It begins intitializing the ensemble with a single model, whose predictions can be naive.
+          Then we use the current ensemble to generate predictions.
+            To make a prediction, we add the prediction from all models in the dataset
+          Those predictions are used to calculate a loss function. 
+            A loss function is a measure of how well a machine learning model is performing
+            It quantifies the error, or the difference between the prediction and the actual values
+            There are a lot, like Mean Squared Error, that is used in  regression problems
+            Cross-Entropy loss that is used in classification problems, that measures the difference between 2 probab functions
+          Then we use the loss function to fit a new model that will be added to the ensemble.
+            The parameters of the function will be determined so that the adding of this function will reduce the loss
+          New model gets added to the assemble and repeats.
+      CODE
+          from xgboost import XGBRegressor
+          my_model = XGBRegressor()
+          my_model.fit(X_train, y_train)
+        Works really similar to the traditional way to do ML
+          predictions = my_model.predict(X_valid)
+        Also predictions are done with the model
+        Important parameters
+          n_estimators
+            How many times to go through the modeling cycle. It is equal to the number of models that we include
+              To low and causes underfitting
+              TO high and causes overfitting
+            Ranges 100-1000 depending on the learning_rate
+            my_model = XGBRegressor(n_estimators=500)
+            my_model.fit(X_train, y_train)
+          early_stopping_rounds
+            Offers a way to find the ideal value for n_estimators.
+            It literally early stops. So we can set a high n_estimators and then use early_stopping_rounds
+            But this parameter has also a value. Since random chance can cause a single round when the model does not improve.
+            so we can set the amount of round that must be stable before stopping.
+              my_model.fit(X_train, y_train, early_stopping_rounds=5,
+              eval_set=[(X_valid, y_valid)], verbose=False)
+            We have to set aside some data for calculating the validation scores.
+            With the result of said code, when we want to evaluate against a test set, we can the n_estimators
+          learning_rate
+            Instead of getting predictions by simply adding up the predictions from the previous models, we multiply the predictions
+            by a number, this being the learning rate, before adding them.
+            Doing that, the later models will have less influence in the result. Thus being able to have more n_estimators wihtout overfitting
+            In general, small learning rate and large number of estimators will yield more accurate XGBoost models
+            We can also get the n_estimatos by using early_stopping_rounds
+              my_model(n_estimators=1000, learning_rate=0.05)
+          n_jobs
+            Larger datasets we can use parallelism to build models faster. So we set n_jobs equal to the number of cores in our machine
+              my_model(n_estimators=1000, learning_rate=0.05, n_jobs=4)
+      DATA LEAKAGE
+        Data leakage happens when our traning data contains information about the target, but similar data will not be available
+        That means that high performance on the training set, but poor performance in production
+        There are two types of data leakage target leakage and train-test contamination
+        TARGET LEAKAGE
+          Occurs when our predictors include data that will not be available at the time we make predictions.
+          Speaclly in terms of timing or chronological order.
+            For example, we want to predict which patients will have pneumonia. BUt our set also has a column that is took_medicine
+            So it is weird because we can not predict if that person got pneumonia based on the medicine. Because there will be a strong
+            correlation between those variables, as those will be correlated. 
+            Issue is that, the correlation will be strong, and our model will be based on said variable. But once we go into production, 
+            we will not have the took_medicine column
